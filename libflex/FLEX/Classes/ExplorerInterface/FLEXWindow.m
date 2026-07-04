@@ -15,9 +15,10 @@
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        // Keep FLEX above app, keyboard, and system overlay windows so select mode
-        // can inspect high-level views such as the software keyboard.
-        self.windowLevel = CGFLOAT_MAX;
+        // Some apps have windows at UIWindowLevelStatusBar + n.
+        // If we make the window level too high, we block out UIAlertViews.
+        // There's a balance between staying above the app's windows and staying below alerts.
+        self.windowLevel = UIWindowLevelAlert - 1;
     }
     return self;
 }
