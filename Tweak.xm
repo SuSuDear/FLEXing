@@ -94,25 +94,44 @@ static int volumeFLEXNotifyToken = 0;
 
 @end
 
+static UIWindow *FLEXingLoadingWindow = nil;
 static UIView *FLEXingLoadingOverlay = nil;
 
-static UIWindow *FLEXingPresentationWindow(void) {
+static CGRect FLEXingLoadingWindowFrame(void) {
     UIWindow *keyWindow = UIApplication.sharedApplication.keyWindow;
-    if (keyWindow) return keyWindow;
+    if (keyWindow) return keyWindow.bounds;
+    return UIScreen.mainScreen.bounds;
+}
 
-    for (UIWindow *window in UIApplication.sharedApplication.windows.reverseObjectEnumerator) {
-        if (!window.hidden && window.alpha > 0.0) {
-            return window;
+static UIWindow *FLEXingCreateLoadingWindow(void) {
+    Class windowClass = FLXWindowClass ? FLXWindowClass() : Nil;
+    if (!windowClass || ![windowClass isSubclassOfClass:UIWindow.class]) {
+        windowClass = UIWindow.class;
+    }
+
+    UIWindow *window = [[windowClass alloc] initWithFrame:FLEXingLoadingWindowFrame()];
+    window.windowLevel = UIWindowLevelAlert - 1;
+    window.backgroundColor = UIColor.clearColor;
+    window.rootViewController = [UIViewController new];
+
+    if (@available(iOS 13.0, *)) {
+        UIWindow *keyWindow = UIApplication.sharedApplication.keyWindow;
+        if (keyWindow.windowScene) {
+            window.windowScene = keyWindow.windowScene;
         }
     }
-    return nil;
+
+    return window;
 }
 
 static void FLEXingShowLoadingOverlay(void) {
-    UIWindow *window = FLEXingPresentationWindow();
-    if (!window || FLEXingLoadingOverlay) return;
+    if (FLEXingLoadingWindow || FLEXingLoadingOverlay) return;
 
-    UIView *overlay = [[UIView alloc] initWithFrame:window.bounds];
+    UIWindow *window = FLEXingCreateLoadingWindow();
+    UIView *hostView = window.rootViewController.view;
+    hostView.backgroundColor = UIColor.clearColor;
+
+    UIView *overlay = [[UIView alloc] initWithFrame:hostView.bounds];
     overlay.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     overlay.userInteractionEnabled = NO;
     overlay.alpha = 0.0;
@@ -145,7 +164,7 @@ static void FLEXingShowLoadingOverlay(void) {
     label.translatesAutoresizingMaskIntoConstraints = NO;
     [card addSubview:label];
 
-    [window addSubview:overlay];
+    [hostView addSubview:overlay];
     [NSLayoutConstraint activateConstraints:@[
         [card.centerXAnchor constraintEqualToAnchor:overlay.centerXAnchor],
         [card.centerYAnchor constraintEqualToAnchor:overlay.centerYAnchor],
@@ -160,21 +179,26 @@ static void FLEXingShowLoadingOverlay(void) {
         [label.rightAnchor constraintEqualToAnchor:card.rightAnchor constant:-16.0]
     ]];
 
+    FLEXingLoadingWindow = window;
     FLEXingLoadingOverlay = overlay;
+    window.hidden = NO;
     [UIView animateWithDuration:0.16 animations:^{
         overlay.alpha = 1.0;
     }];
 }
 
 static void FLEXingHideLoadingOverlay(void) {
+    UIWindow *window = FLEXingLoadingWindow;
     UIView *overlay = FLEXingLoadingOverlay;
+    FLEXingLoadingWindow = nil;
     FLEXingLoadingOverlay = nil;
-    if (!overlay) return;
+    if (!overlay && !window) return;
 
     [UIView animateWithDuration:0.16 animations:^{
         overlay.alpha = 0.0;
     } completion:^(BOOL finished) {
         [overlay removeFromSuperview];
+        window.hidden = YES;
     }];
 }
 
@@ -276,9 +300,7 @@ inline BOOL flexAlreadyLoaded() {
             if (bid.length > 0 && ![bid isEqualToString:@"com.apple.springboard"]) {
                 NSString *notification = [@"com.susudear.flexing.volume/" stringByAppendingString:bid];
                 notify_register_dispatch(notification.UTF8String, &volumeFLEXNotifyToken, dispatch_get_main_queue(), ^(int token) {
-                    if (initialized && manager && show) {
-                        [manager performSelector:show];
-                    }
+                    FLEXingShowExplorerWithLoading();
                 });
             }
         }
@@ -287,7 +309,8 @@ inline BOOL flexAlreadyLoaded() {
 
 %hook UIWindow
 - (BOOL)_shouldCreateContextAsSecure {
-    return (initialized && [self isKindOfClass:FLXWindowClass()]) ? YES : %orig;
+    Class flexWindowClass = FLXWindowClass ? FLXWindowClass() : Nil;
+    return (initialized && flexWindowClass && [self isKindOfClass:flexWindowClass]) ? YES : %orig;
 }
 
 %end
