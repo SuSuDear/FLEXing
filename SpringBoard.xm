@@ -35,11 +35,9 @@
         NSString *bundleIdentifier = [frontMostApp bundleIdentifier];
         if (bundleIdentifier.length > 0) {
             NSString *notification = [@"com.susudear.flexing.volume/" stringByAppendingString:bundleIdentifier];
-            FLEXingShowLoadingThenRun(^{
-                notify_post(notification.UTF8String);
-            });
+            notify_post(notification.UTF8String);
         } else if (initialized && manager && show) {
-            FLEXingShowExplorerWithLoading();
+            [manager performSelector:show];
         }
     }
 
