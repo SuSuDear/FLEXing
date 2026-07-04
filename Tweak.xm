@@ -153,7 +153,7 @@ static void FLEXingShowLoadingOverlay(void) {
     [card addSubview:dotsView];
 
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
-    label.text = @"Loading";
+    label.text = @"Loading FLEX";
     label.font = [UIFont systemFontOfSize:13.0 weight:UIFontWeightMedium];
     label.textAlignment = NSTextAlignmentCenter;
     if (@available(iOS 13.0, *)) {
