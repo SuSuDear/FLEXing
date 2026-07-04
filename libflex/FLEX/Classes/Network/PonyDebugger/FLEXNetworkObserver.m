@@ -97,15 +97,15 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask delegate:(id<NSUR
 
 + (void)setEnabled:(BOOL)enabled {
     BOOL previouslyEnabled = [self isEnabled];
-    
+
     NSUserDefaults.standardUserDefaults.flex_networkObserverEnabled = enabled;
-    
+
     if (enabled) {
         // Inject if needed. This injection is protected with a dispatch_once, so we're ok calling it multiple times.
         // By doing the injection lazily, we keep the impact of the tool lower when this feature isn't enabled.
         [self setNetworkMonitorHooks];
     }
-    
+
     if (previouslyEnabled != enabled) {
         [NSNotificationCenter.defaultCenter postNotificationName:kFLEXNetworkObserverEnabledStateChangedNotification object:self];
     }
@@ -228,10 +228,10 @@ static FIRDocumentReference * (*_logos_orig$_ungrouped$FIRCollectionReference$ad
 
 static void _logos_method$_ungrouped$FIRDocumentReference$getDocumentWithCompletion$(
     _LOGOS_SELF_TYPE_NORMAL FIRDocumentReference * _LOGOS_SELF_CONST self, SEL _cmd, FIRDocumentSnapshotBlock completion) {
-    
+
     // Generate transaction ID
     NSString *requestID = [FLEXNetworkObserver nextRequestID];
-    
+
     // Record transaction start
     [FLEXNetworkRecorder.defaultRecorder recordFIRDocumentWillFetch:self withTransactionID:requestID];
     // Hook callback
@@ -242,17 +242,17 @@ static void _logos_method$_ungrouped$FIRDocumentReference$getDocumentWithComplet
             orig(document, error);
         }
     };
-    
+
     // Forward invocation
     (_logos_orig$_ungrouped$FIRDocumentReference$getDocumentWithCompletion$ ? _logos_orig$_ungrouped$FIRDocumentReference$getDocumentWithCompletion$ : (__typeof__(_logos_orig$_ungrouped$FIRDocumentReference$getDocumentWithCompletion$))class_getMethodImplementation(_logos_superclass$_ungrouped$FIRDocumentReference, @selector(getDocumentWithCompletion:)))(self, _cmd, completion);
 }
 
 static void _logos_method$_ungrouped$FIRQuery$getDocumentsWithCompletion$(
     _LOGOS_SELF_TYPE_NORMAL FIRQuery * _LOGOS_SELF_CONST self, SEL _cmd, FIRQuerySnapshotBlock completion) {
-    
+
     // Generate transaction ID
     NSString *requestID = [FLEXNetworkObserver nextRequestID];
-    
+
     // Record transaction start
     [FLEXNetworkRecorder.defaultRecorder recordFIRQueryWillFetch:self withTransactionID:requestID];
     // Hook callback
@@ -263,7 +263,7 @@ static void _logos_method$_ungrouped$FIRQuery$getDocumentsWithCompletion$(
             orig(query, error);
         }
     };
-    
+
     // Forward invocation
     (_logos_orig$_ungrouped$FIRQuery$getDocumentsWithCompletion$ ? _logos_orig$_ungrouped$FIRQuery$getDocumentsWithCompletion$ : (__typeof__(_logos_orig$_ungrouped$FIRQuery$getDocumentsWithCompletion$))class_getMethodImplementation(_logos_superclass$_ungrouped$FIRQuery, @selector(getDocumentsWithCompletion:)))(self, _cmd, completion);
 }
@@ -276,7 +276,7 @@ static void _logos_method$_ungrouped$FIRDocumentReference$setData$merge$completi
 
     // Generate transaction ID
     NSString *requestID = [FLEXNetworkObserver nextRequestID];
-    
+
     // Record transaction start
     [FLEXNetworkRecorder.defaultRecorder
         recordFIRWillSetData:self
@@ -285,7 +285,7 @@ static void _logos_method$_ungrouped$FIRDocumentReference$setData$merge$completi
         mergeFields:nil
         transactionID:requestID
     ];
-    
+
     // Hook callback
     void (^orig)(NSError *) = completion;
     completion = ^(NSError *error) {
@@ -294,7 +294,7 @@ static void _logos_method$_ungrouped$FIRDocumentReference$setData$merge$completi
             orig(error);
         }
     };
-    
+
     // Forward invocation
     (_logos_orig$_ungrouped$FIRDocumentReference$setData$merge$completion$ ? _logos_orig$_ungrouped$FIRDocumentReference$setData$merge$completion$ : (__typeof__(_logos_orig$_ungrouped$FIRDocumentReference$setData$merge$completion$))class_getMethodImplementation(_logos_superclass$_ungrouped$FIRDocumentReference, @selector(setData:merge:completion:)))(self, _cmd, documentData, merge, completion);
 }
@@ -306,7 +306,7 @@ static void _logos_method$_ungrouped$FIRDocumentReference$setData$mergeFields$co
 
     // Generate transaction ID
     NSString *requestID = [FLEXNetworkObserver nextRequestID];
-    
+
     // Record transaction start
     [FLEXNetworkRecorder.defaultRecorder
         recordFIRWillSetData:self
@@ -324,7 +324,7 @@ static void _logos_method$_ungrouped$FIRDocumentReference$setData$mergeFields$co
             orig(error);
         }
     };
-    
+
     // Forward invocation
     (_logos_orig$_ungrouped$FIRDocumentReference$setData$mergeFields$completion$ ? _logos_orig$_ungrouped$FIRDocumentReference$setData$mergeFields$completion$ : (__typeof__(_logos_orig$_ungrouped$FIRDocumentReference$setData$mergeFields$completion$))class_getMethodImplementation(_logos_superclass$_ungrouped$FIRDocumentReference, @selector(setData:mergeFields:completion:)))(self, _cmd, documentData, mergeFields, completion);
 }
@@ -335,7 +335,7 @@ static void _logos_method$_ungrouped$FIRDocumentReference$updateData$completion$
 
     // Generate transaction ID
     NSString *requestID = [FLEXNetworkObserver nextRequestID];
-    
+
     // Record transaction start
     [FLEXNetworkRecorder.defaultRecorder recordFIRWillUpdateData:self fields:fields transactionID:requestID];
     // Hook callback
@@ -346,7 +346,7 @@ static void _logos_method$_ungrouped$FIRDocumentReference$updateData$completion$
             orig(error);
         }
     };
-    
+
     // Forward invocation
     (_logos_orig$_ungrouped$FIRDocumentReference$updateData$completion$ ? _logos_orig$_ungrouped$FIRDocumentReference$updateData$completion$ : (__typeof__(_logos_orig$_ungrouped$FIRDocumentReference$updateData$completion$))class_getMethodImplementation(_logos_superclass$_ungrouped$FIRDocumentReference, @selector(updateData:completion:)))(self, _cmd, fields, completion);
 }
@@ -357,7 +357,7 @@ static void _logos_method$_ungrouped$FIRDocumentReference$deleteDocumentWithComp
 
     // Generate transaction ID
     NSString *requestID = [FLEXNetworkObserver nextRequestID];
-    
+
     // Record transaction start
     [FLEXNetworkRecorder.defaultRecorder recordFIRWillDeleteDocument:self transactionID:requestID];
     // Hook callback
@@ -368,7 +368,7 @@ static void _logos_method$_ungrouped$FIRDocumentReference$deleteDocumentWithComp
             orig(error);
         }
     };
-    
+
     // Forward invocation
     (_logos_orig$_ungrouped$FIRDocumentReference$deleteDocumentWithCompletion$ ? _logos_orig$_ungrouped$FIRDocumentReference$deleteDocumentWithCompletion$ : (__typeof__(_logos_orig$_ungrouped$FIRDocumentReference$deleteDocumentWithCompletion$))class_getMethodImplementation(_logos_superclass$_ungrouped$FIRDocumentReference, @selector(deleteDocumentWithCompletion:)))(self, _cmd, completion);
 }
@@ -579,7 +579,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
     [self injectDidReceiveResponseIntoDelegateClass:cls];
     [self injectDidFinishLoadingIntoDelegateClass:cls];
     [self injectDidFailWithErrorIntoDelegateClass:cls];
-    
+
     // Sessions
     [self injectTaskWillPerformHTTPRedirectionIntoDelegateClass:cls];
     [self injectTaskDidReceiveDataIntoDelegateClass:cls];
@@ -638,11 +638,11 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
                 baseResumeClass = NSClassFromString(@"__NSCFURLSessionTask");
             }
         }
-        
+
         // Hook the base implementation of -resume
         IMP originalResume = [baseResumeClass instanceMethodForSelector:@selector(resume)];
         [self swizzleResumeSelector:@selector(resume) forClass:baseResumeClass];
-        
+
         // *Sigh*
         //
         // So, multiple versions of AFNetworking 2.5.X swizzle -resume in various and
@@ -667,7 +667,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
             for (NSInteger i = 0; i < classTree.count; i++) {
                 [classTree addObjectsFromArray:FLEXGetAllSubclasses(classTree[i], NO)];
             }
-            
+
             for (Class current in classTree) {
                 IMP af_resume = [current instanceMethodForSelector:sel_af_resume];
                 if (af_resume == originalResume) {
@@ -682,7 +682,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
     SEL swizzledSelector = [FLEXUtility swizzledSelectorForSelector:selector];
     Method originalResume = class_getInstanceMethod(class, selector);
     IMP implementation = imp_implementationWithBlock(^(NSURLSessionTask *slf) {
-        
+
         if (@available(iOS 11.0, *)) {
             // AVAggregateAssetDownloadTask deeply does not like to be looked at. Accessing -currentRequest or
             // -originalRequest will crash. Do not try to observe these. https://github.com/FLEXTool/FLEX/issues/276
@@ -703,7 +703,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
             slf, swizzledSelector
         );
     });
-    
+
     class_addMethod(class, swizzledSelector, implementation, method_getTypeEncoding(originalResume));
     Method newResume = class_getInstanceMethod(class, swizzledSelector);
     method_exchangeImplementations(originalResume, newResume);
@@ -733,10 +733,10 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
                      request:request
                      redirectResponse:nil
                 ];
-                
+
                 NSString *mechanism = [self mechanismFromClassMethod:selector onClass:class];
                 [FLEXNetworkRecorder.defaultRecorder recordMechanism:mechanism forRequestID:requestID];
-                
+
                 AsyncCompletion wrapper = ^(NSURLResponse *response, NSData *data, NSError *error) {
                     [FLEXNetworkRecorder.defaultRecorder
                         recordResponseReceivedWithRequestID:requestID
@@ -772,7 +772,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
                 );
             }
         };
-        
+
         [FLEXUtility replaceImplementationOfKnownSelector:selector
             onClass:class withBlock:swizzleBlock swizzledSelector:swizzledSelector
         ];
@@ -799,7 +799,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
                     request:request
                     redirectResponse:nil
                 ];
-                
+
                 NSString *mechanism = [self mechanismFromClassMethod:selector onClass:class];
                 [FLEXNetworkRecorder.defaultRecorder recordMechanism:mechanism forRequestID:requestID];
                 NSError *temporaryError = nil;
@@ -807,7 +807,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
                 data = ((id(*)(id, SEL, id, NSURLResponse **, NSError **))objc_msgSend)(
                     slf, swizzledSelector, request, &temporaryResponse, &temporaryError
                 );
-                
+
                 [FLEXNetworkRecorder.defaultRecorder
                     recordResponseReceivedWithRequestID:requestID
                     response:temporaryResponse
@@ -816,7 +816,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
                     recordDataReceivedWithRequestID:requestID
                     dataLength:data.length
                 ];
-                
+
                 if (temporaryError) {
                     [FLEXNetworkRecorder.defaultRecorder
                         recordLoadingFailedWithRequestID:requestID
@@ -828,7 +828,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
                         responseBody:data
                     ];
                 }
-                
+
                 if (error) {
                     *error = temporaryError;
                 }
@@ -843,7 +843,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
 
             return data;
         };
-        
+
         [FLEXUtility replaceImplementationOfKnownSelector:selector
             onClass:class withBlock:swizzleBlock swizzledSelector:swizzledSelector
         ];
@@ -854,7 +854,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         Class class = sessionClass;
-        
+
         // The method signatures here are close enough that
         // we can use the same logic to inject into all of them.
         const SEL selectors[] = {
@@ -876,7 +876,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
                 // swizzle __NSCFURLSession, which we can get from the class of the shared session
                 class = [NSURLSession.sharedSession class];
             }
-            
+
             typedef NSURLSessionTask * (^NSURLSessionNewTaskMethod)(
                 NSURLSession *, id, NSURLSessionAsyncCompletion
             );
@@ -894,7 +894,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
                         mechanism:mechanism
                         completion:completion
                     ];
-                    
+
                     // Call the original method
                     task = ((id(*)(id, SEL, id, id))objc_msgSend)(
                         slf, swizzledSelector, argument, completionWrapper
@@ -909,7 +909,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
                 }
                 return task;
             };
-            
+
             // Actually swizzle
             [FLEXUtility replaceImplementationOfKnownSelector:selector
                 onClass:class withBlock:swizzleBlock swizzledSelector:swizzledSelector
@@ -922,7 +922,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         Class class = sessionClass;
-        
+
         // The method signatures here are close enough that we can use the same logic to inject into both of them.
         // Note that they have 3 arguments, so we can't easily combine with the data and download method above.
         typedef NSURLSessionUploadTask *(^UploadTaskMethod)(
@@ -945,7 +945,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
                 class = [NSURLSession.sharedSession class];
             }
 
-            
+
             UploadTaskMethod swizzleBlock = ^NSURLSessionUploadTask *(NSURLSession * slf,
                                                                       NSURLRequest *request,
                                                                       id argument,
@@ -959,7 +959,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
                         mechanism:mechanism
                         completion:completion
                     ];
-                    
+
                     task = ((id(*)(id, SEL, id, id, id))objc_msgSend)(
                         slf, swizzledSelector, request, argument, completionWrapper
                     );
@@ -971,7 +971,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
                 }
                 return task;
             };
-            
+
             [FLEXUtility replaceImplementationOfKnownSelector:selector
                 onClass:class withBlock:swizzleBlock swizzledSelector:swizzledSelector
             ];
@@ -992,19 +992,19 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
             recordResponseReceivedWithRequestID:requestID
             response:response
         ];
-        
+
         NSData *data = nil;
         if ([fileURLOrData isKindOfClass:[NSURL class]]) {
             data = [NSData dataWithContentsOfURL:fileURLOrData];
         } else if ([fileURLOrData isKindOfClass:[NSData class]]) {
             data = fileURLOrData;
         }
-        
+
         [FLEXNetworkRecorder.defaultRecorder
             recordDataReceivedWithRequestID:requestID
             dataLength:data.length
         ];
-        
+
         if (error) {
             [FLEXNetworkRecorder.defaultRecorder
                 recordLoadingFailedWithRequestID:requestID
@@ -1028,18 +1028,18 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
 + (void)injectWillSendRequestIntoDelegateClass:(Class)cls {
     SEL selector = @selector(connection:willSendRequest:redirectResponse:);
     SEL swizzledSelector = [FLEXUtility swizzledSelectorForSelector:selector];
-    
+
     Protocol *protocol = @protocol(NSURLConnectionDataDelegate);
     protocol = protocol ?: @protocol(NSURLConnectionDelegate);
     struct objc_method_description methodDescription = protocol_getMethodDescription(
         protocol, selector, NO, YES
     );
-    
+
     typedef NSURLRequest *(^WillSendRequestBlock)(
         id<NSURLConnectionDelegate> slf, NSURLConnection *connection,
         NSURLRequest *request, NSURLResponse *response
     );
-    
+
     WillSendRequestBlock undefinedBlock = ^NSURLRequest *(id slf,
                                                           NSURLConnection *connection,
                                                           NSURLRequest *request,
@@ -1052,7 +1052,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
         ];
         return request;
     };
-    
+
     WillSendRequestBlock implementationBlock = ^NSURLRequest *(id slf,
                                                                NSURLConnection *connection,
                                                                NSURLRequest *request,
@@ -1067,7 +1067,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
         }];
         return returnValue;
     };
-    
+
     [FLEXUtility replaceImplementationOfSelector:selector
         withSelector:swizzledSelector
         forClass:cls
@@ -1080,17 +1080,17 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
 + (void)injectDidReceiveResponseIntoDelegateClass:(Class)cls {
     SEL selector = @selector(connection:didReceiveResponse:);
     SEL swizzledSelector = [FLEXUtility swizzledSelectorForSelector:selector];
-    
+
     Protocol *protocol = @protocol(NSURLConnectionDataDelegate);
     protocol = protocol ?: @protocol(NSURLConnectionDelegate);
     struct objc_method_description description = protocol_getMethodDescription(
         protocol, selector, NO, YES
     );
-    
+
     typedef void (^DidReceiveResponseBlock)(
         id<NSURLConnectionDelegate> slf, NSURLConnection *connection, NSURLResponse *response
     );
-    
+
     DidReceiveResponseBlock undefinedBlock = ^(id<NSURLConnectionDelegate> slf,
                                                NSURLConnection *connection,
                                                NSURLResponse *response) {
@@ -1098,7 +1098,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
             didReceiveResponse:response delegate:slf
         ];
     };
-    
+
     DidReceiveResponseBlock implementationBlock = ^(id<NSURLConnectionDelegate> slf,
                                                     NSURLConnection *connection,
                                                     NSURLResponse *response) {
@@ -1110,7 +1110,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
             );
         }];
     };
-    
+
     [FLEXUtility replaceImplementationOfSelector:selector
         withSelector:swizzledSelector
         forClass:cls
@@ -1123,25 +1123,25 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
 + (void)injectDidReceiveDataIntoDelegateClass:(Class)cls {
     SEL selector = @selector(connection:didReceiveData:);
     SEL swizzledSelector = [FLEXUtility swizzledSelectorForSelector:selector];
-    
+
     Protocol *protocol = @protocol(NSURLConnectionDataDelegate);
     protocol = protocol ?: @protocol(NSURLConnectionDelegate);
     struct objc_method_description description = protocol_getMethodDescription(
         protocol, selector, NO, YES
     );
-    
+
     typedef void (^DidReceiveDataBlock)(
         id<NSURLConnectionDelegate> slf, NSURLConnection *connection, NSData *data
     );
-    
+
     DidReceiveDataBlock undefinedBlock = ^(id<NSURLConnectionDelegate> slf,
                                            NSURLConnection *connection,
                                            NSData *data) {
-        [FLEXNetworkObserver.sharedObserver connection:connection 
+        [FLEXNetworkObserver.sharedObserver connection:connection
             didReceiveData:data delegate:slf
         ];
     };
-    
+
     DidReceiveDataBlock implementationBlock = ^(id<NSURLConnectionDelegate> slf,
                                                 NSURLConnection *connection,
                                                 NSData *data) {
@@ -1153,7 +1153,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
             );
         }];
     };
-    
+
     [FLEXUtility replaceImplementationOfSelector:selector
         withSelector:swizzledSelector
         forClass:cls
@@ -1166,19 +1166,19 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
 + (void)injectDidFinishLoadingIntoDelegateClass:(Class)cls {
     SEL selector = @selector(connectionDidFinishLoading:);
     SEL swizzledSelector = [FLEXUtility swizzledSelectorForSelector:selector];
-    
+
     Protocol *protocol = @protocol(NSURLConnectionDataDelegate);
     protocol = protocol ?: @protocol(NSURLConnectionDelegate);
     struct objc_method_description description = protocol_getMethodDescription(
         protocol, selector, NO, YES
     );
-    
+
     typedef void (^FinishLoadingBlock)(id<NSURLConnectionDelegate> slf, NSURLConnection *connection);
-    
+
     FinishLoadingBlock undefinedBlock = ^(id<NSURLConnectionDelegate> slf, NSURLConnection *connection) {
         [FLEXNetworkObserver.sharedObserver connectionDidFinishLoading:connection delegate:slf];
     };
-    
+
     FinishLoadingBlock implementationBlock = ^(id<NSURLConnectionDelegate> slf, NSURLConnection *connection) {
         [self sniffWithoutDuplicationForObject:connection selector:selector sniffingBlock:^{
             undefinedBlock(slf, connection);
@@ -1188,7 +1188,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
             );
         }];
     };
-    
+
     [FLEXUtility replaceImplementationOfSelector:selector
         withSelector:swizzledSelector forClass:cls
         withMethodDescription:description
@@ -1200,15 +1200,15 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
 + (void)injectDidFailWithErrorIntoDelegateClass:(Class)cls {
     SEL selector = @selector(connection:didFailWithError:);
     SEL swizzledSelector = [FLEXUtility swizzledSelectorForSelector:selector];
-    
+
     struct objc_method_description description = protocol_getMethodDescription(
         @protocol(NSURLConnectionDelegate), selector, NO, YES
     );
-    
+
     typedef void (^DidFailWithErrorBlock)(
         id<NSURLConnectionDelegate> slf, NSURLConnection *connection, NSError *error
     );
-    
+
     DidFailWithErrorBlock undefinedBlock = ^(id<NSURLConnectionDelegate> slf,
                                              NSURLConnection *connection,
                                              NSError *error) {
@@ -1216,7 +1216,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
             didFailWithError:error delegate:slf
         ];
     };
-    
+
     DidFailWithErrorBlock implementationBlock = ^(id<NSURLConnectionDelegate> slf,
                                                   NSURLConnection *connection,
                                                   NSError *error) {
@@ -1228,7 +1228,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
             );
         }];
     };
-    
+
     [FLEXUtility replaceImplementationOfSelector:selector
         withSelector:swizzledSelector forClass:cls
         withMethodDescription:description
@@ -1244,14 +1244,14 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
     struct objc_method_description description = protocol_getMethodDescription(
         @protocol(NSURLSessionTaskDelegate), selector, NO, YES
     );
-    
+
     typedef void (^HTTPRedirectionBlock)(id<NSURLSessionTaskDelegate> slf,
                                          NSURLSession *session,
                                          NSURLSessionTask *task,
                                          NSHTTPURLResponse *response,
                                          NSURLRequest *newRequest,
                                          void(^completionHandler)(NSURLRequest *));
-    
+
     HTTPRedirectionBlock undefinedBlock = ^(id<NSURLSessionTaskDelegate> slf,
                                             NSURLSession *session,
                                             NSURLSessionTask *task,
@@ -1301,11 +1301,11 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
 + (void)injectTaskDidReceiveDataIntoDelegateClass:(Class)cls {
     SEL selector = @selector(URLSession:dataTask:didReceiveData:);
     SEL swizzledSelector = [FLEXUtility swizzledSelectorForSelector:selector];
-    
+
     struct objc_method_description description = protocol_getMethodDescription(
         @protocol(NSURLSessionDataDelegate), selector, NO, YES
     );
-    
+
     typedef void (^DidReceiveDataBlock)(id<NSURLSessionDataDelegate> slf,
                                         NSURLSession *session,
                                         NSURLSessionDataTask *dataTask,
@@ -1318,7 +1318,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
             dataTask:dataTask didReceiveData:data delegate:slf
         ];
     };
-    
+
     DidReceiveDataBlock implementationBlock = ^(id<NSURLSessionDataDelegate> slf,
                                                 NSURLSession *session,
                                                 NSURLSessionDataTask *dataTask,
@@ -1331,7 +1331,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
             );
         }];
     };
-    
+
     [FLEXUtility replaceImplementationOfSelector:selector
         withSelector:swizzledSelector
         forClass:cls
@@ -1388,17 +1388,17 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
 + (void)injectTaskDidReceiveResponseIntoDelegateClass:(Class)cls {
     SEL selector = @selector(URLSession:dataTask:didReceiveResponse:completionHandler:);
     SEL swizzledSelector = [FLEXUtility swizzledSelectorForSelector:selector];
-    
+
     struct objc_method_description description = protocol_getMethodDescription(
         @protocol(NSURLSessionDataDelegate), selector, NO, YES
     );
-    
+
     typedef void (^DidReceiveResponseBlock)(id<NSURLSessionDelegate> slf,
                                             NSURLSession *session,
                                             NSURLSessionDataTask *dataTask,
                                             NSURLResponse *response,
                                             void(^completion)(NSURLSessionResponseDisposition));
-    
+
     DidReceiveResponseBlock undefinedBlock = ^(id<NSURLSessionDelegate> slf,
                                                NSURLSession *session,
                                                NSURLSessionDataTask *dataTask,
@@ -1413,7 +1413,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
         ];
         completion(NSURLSessionResponseAllow);
     };
-    
+
     DidReceiveResponseBlock implementationBlock = ^(id<NSURLSessionDelegate> slf,
                                                     NSURLSession *session,
                                                     NSURLSessionDataTask *dataTask,
@@ -1433,7 +1433,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
             );
         }];
     };
-    
+
     [FLEXUtility replaceImplementationOfSelector:selector
         withSelector:swizzledSelector
         forClass:cls
@@ -1447,11 +1447,11 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
 + (void)injectTaskDidCompleteWithErrorIntoDelegateClass:(Class)cls {
     SEL selector = @selector(URLSession:task:didCompleteWithError:);
     SEL swizzledSelector = [FLEXUtility swizzledSelectorForSelector:selector];
-    
+
     struct objc_method_description description = protocol_getMethodDescription(
         @protocol(NSURLSessionDataDelegate), selector, NO, YES
     );
-    
+
     typedef void (^DidCompleteWithErrorBlock)(id<NSURLSessionTaskDelegate> slf,
                                               NSURLSession *session,
                                               NSURLSessionTask *task,
@@ -1465,7 +1465,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
             task:task didCompleteWithError:error delegate:slf
         ];
     };
-    
+
     DidCompleteWithErrorBlock implementationBlock = ^(id<NSURLSessionTaskDelegate> slf,
                                                       NSURLSession *session,
                                                       NSURLSessionTask *task,
@@ -1638,7 +1638,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
         [FLEXNetworkObserver.sharedObserver
             websocketTask:slf sendMessagage:message
         ];
-        
+
         id completionHook = ^(NSError *error) {
             [FLEXNetworkObserver.sharedObserver
                 websocketTaskMessageSendCompletion:message
@@ -1648,7 +1648,7 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
                 completion(error);
             }
         };
-        
+
         ((void(*)(id, SEL, id, id))objc_msgSend)(
             slf, swizzledSelector, message, completionHook
         );
@@ -1673,14 +1673,14 @@ static FIRDocumentReference * _logos_method$_ungrouped$FIRCollectionReference$ad
     SendMessageBlock implementationBlock = ^(
         NSURLSessionWebSocketTask *slf,
         void (^completion)(NSURLSessionWebSocketMessage *message, NSError *error)
-    ) {        
+    ) {
         id completionHook = ^(NSURLSessionWebSocketMessage *message, NSError *error) {
             [FLEXNetworkObserver.sharedObserver
                 websocketTask:slf receiveMessagage:message error:error
             ];
             completion(message, error);
         };
-        
+
         ((void(*)(id, SEL, id))objc_msgSend)(
             slf, swizzledSelector, completionHook
         );
@@ -1721,7 +1721,7 @@ static char const * const kFLEXRequestIDKey = "kFLEXRequestIDKey";
             "com.flex.FLEXNetworkObserver", DISPATCH_QUEUE_SERIAL
         );
     }
-    
+
     return self;
 }
 
@@ -1739,7 +1739,7 @@ static char const * const kFLEXRequestIDKey = "kFLEXRequestIDKey";
         requestState = [FLEXInternalRequestState new];
         [self.requestStatesForRequestIDs setObject:requestState forKey:requestID];
     }
-    
+
     return requestState;
 }
 
@@ -1760,13 +1760,13 @@ static char const * const kFLEXRequestIDKey = "kFLEXRequestIDKey";
         NSString *requestID = [[self class] requestIDForConnectionOrTask:connection];
         FLEXInternalRequestState *requestState = [self requestStateForRequestID:requestID];
         requestState.request = request;
-        
+
         [FLEXNetworkRecorder.defaultRecorder
             recordRequestWillBeSentWithRequestID:requestID
             request:request
             redirectResponse:response
         ];
-        
+
         NSString *mechanism = [NSString stringWithFormat:
             @"NSURLConnection (delegate: %@)", [delegate class]
         ];
@@ -1798,7 +1798,7 @@ didReceiveResponse:(NSURLResponse *)response
         NSString *requestID = [[self class] requestIDForConnectionOrTask:connection];
         FLEXInternalRequestState *requestState = [self requestStateForRequestID:requestID];
         [requestState.dataAccumulator appendData:data];
-        
+
         [FLEXNetworkRecorder.defaultRecorder
             recordDataReceivedWithRequestID:requestID
             dataLength:data.length
@@ -1831,11 +1831,11 @@ didReceiveResponse:(NSURLResponse *)response
         // and clutter up the logs. Only record the failure if the
         // recorder already knows about the request through willSendRequest:...
         if (requestState.request) {
-            [FLEXNetworkRecorder.defaultRecorder 
+            [FLEXNetworkRecorder.defaultRecorder
                 recordLoadingFailedWithRequestID:requestID error:error
             ];
         }
-        
+
         [self removeRequestStateForRequestID:requestID];
     }];
 }
@@ -1948,7 +1948,7 @@ didCompleteWithError:(NSError *)error
             ];
         } else {
             [FLEXNetworkRecorder.defaultRecorder
-                recordLoadingFinishedWithRequestID:requestID 
+                recordLoadingFinishedWithRequestID:requestID
                 responseBody:requestState.dataAccumulator
             ];
         }
@@ -2054,7 +2054,7 @@ didFinishDownloadingToURL:(NSURL *)location data:(NSData *)data
             [FLEXNetworkRecorder.defaultRecorder
                 recordWebsocketMessageReceived:message
                 task:task
-            ];            
+            ];
         }
     }];
 }

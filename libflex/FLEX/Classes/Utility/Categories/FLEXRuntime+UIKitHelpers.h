@@ -16,7 +16,7 @@
 @class FLEXObjectExplorerDefaults;
 
 /// Model objects of an object explorer screen adopt this
-/// protocol in order respond to user defaults changes 
+/// protocol in order respond to user defaults changes
 @protocol FLEXObjectExplorerItem <NSObject>
 /// Current explorer settings. Set when settings change.
 @property (nonatomic) FLEXObjectExplorerDefaults *defaults;
@@ -87,4 +87,3 @@ typedef NS_ENUM(NSUInteger, FLEXStaticMetadataRowStyle) {
 
 
 /// This is assigned to the \c tag property of each metadata.
-

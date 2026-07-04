@@ -26,11 +26,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// @param target The target of the operation
 /// @param data The data associated with the operation
-/// @param onCommit An action to perform when the data changes 
+/// @param onCommit An action to perform when the data changes
 + (instancetype)target:(id)target data:(nullable id)data commitHandler:(void(^_Nullable)(void))onCommit;
 /// @param target The target of the operation
 /// @param data The data associated with the operation
-/// @param onCommit An action to perform when the data changes 
+/// @param onCommit An action to perform when the data changes
 - (id)initWithTarget:(id)target data:(nullable id)data commitHandler:(void(^_Nullable)(void))onCommit;
 
 @property (nonatomic, readonly) id target;

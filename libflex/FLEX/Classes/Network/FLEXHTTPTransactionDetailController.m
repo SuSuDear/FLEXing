@@ -75,7 +75,7 @@ typedef UIViewController *(^FLEXNetworkDetailRowSelectionFuture)(void);
             action:@selector(copyButtonPressed:)
         ]
     ];
-    
+
     [self.tableView registerClass:[FLEXMultilineTableViewCell class] forCellReuseIdentifier:kFLEXMultilineCell];
 }
 
@@ -305,7 +305,7 @@ typedef UIViewController *(^FLEXNetworkDetailRowSelectionFuture)(void);
                     make.title(@"Cannot View HTTP Body Data");
                     make.message(@"FLEX does not have a viewer for request body data with MIME type: ");
                 }
-                
+
                 make.message(contentType);
                 make.button(@"Dismiss").cancelStyle();
             }];
@@ -458,7 +458,7 @@ typedef UIViewController *(^FLEXNetworkDetailRowSelectionFuture)(void);
 + (NSArray<FLEXNetworkDetailRow *> *)networkDetailRowsFromDictionary:(NSDictionary<NSString *, id> *)dictionary {
     NSMutableArray<FLEXNetworkDetailRow *> *rows = [NSMutableArray new];
     NSArray<NSString *> *sortedKeys = [dictionary.allKeys sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-    
+
     for (NSString *key in sortedKeys) {
         id value = dictionary[key];
         FLEXNetworkDetailRow *row = [FLEXNetworkDetailRow new];
@@ -491,7 +491,7 @@ typedef UIViewController *(^FLEXNetworkDetailRowSelectionFuture)(void);
     if (!data) {
         return nil; // An alert will be presented in place of this screen
     }
-    
+
     FLEXCustomContentViewerFuture makeCustomViewer = FLEXManager.sharedManager.customContentTypeViewers[mimeType.lowercaseString];
 
     if (makeCustomViewer) {

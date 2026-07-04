@@ -7,9 +7,9 @@ Pod::Spec.new do |spec|
   spec.author           = { 'Tanner Bennett' => 'tannerbennett@me.com' }
   spec.homepage         = 'https://github.com/FLEXTool/Reflex'
   spec.source           = { :git => 'https://github.com/FLEXTool/Reflex.git', :tag => '#{spec.version}' }
-  
+
   spec.dependency       'FLEX', '~> 4.6.0'
-  
+
   spec.platform         = :ios, '12.0'
   spec.source_files     = 'Reflex/*.swift'
   spec.frameworks       = [ 'Foundation' ]

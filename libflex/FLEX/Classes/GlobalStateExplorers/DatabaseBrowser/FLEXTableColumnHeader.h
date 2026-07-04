@@ -23,7 +23,7 @@ NS_INLINE FLEXTableColumnHeaderSortType FLEXNextTableColumnHeaderSortType(
         case FLEXTableColumnHeaderSortTypeDesc:
             return FLEXTableColumnHeaderSortTypeAsc;
     }
-    
+
     return FLEXTableColumnHeaderSortTypeNone;
 }
 
@@ -35,4 +35,3 @@ NS_INLINE FLEXTableColumnHeaderSortType FLEXNextTableColumnHeaderSortType(
 @property (nonatomic) FLEXTableColumnHeaderSortType sortType;
 
 @end
-

@@ -22,9 +22,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             window.makeKeyAndVisible()
         }
     }
-    
+
     func sceneDidBecomeActive(_ scene: UIScene) {
         FLEXManager.shared.showExplorer()
     }
 }
-

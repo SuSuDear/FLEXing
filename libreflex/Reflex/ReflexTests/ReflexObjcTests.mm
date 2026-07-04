@@ -73,7 +73,7 @@ struct objc_object_ {
 struct objc_class_ : objc_object_ {
     Class superclass;
     cache_t cache; // formerly cache pointer and vtable
-    class_data_bits_t bits;    
+    class_data_bits_t bits;
 };
 
 extern "C" BOOL isSwiftObjectOrClass(id objOrClass) {
@@ -81,9 +81,9 @@ extern "C" BOOL isSwiftObjectOrClass(id objOrClass) {
     if (!object_isClass(objOrClass)) {
         cls = object_getClass(objOrClass);
     }
-    
+
     class_data_bits_t rodata = ((__bridge objc_class_ *)(cls))->bits;
-    
+
     if (@available(macOS 10.14.4, iOS 12.2, tvOS 12.2, watchOS 5.2, *)) {
         return rodata & FAST_IS_SWIFT_STABLE;
     } else {
@@ -100,12 +100,12 @@ extern "C" BOOL isSwiftObjectOrClass(id objOrClass) {
         _frame = frame;
         _alpha = 1;
     }
-    
+
     return self;
 }
 
 - (void)layoutSubviews {
-    
+
 }
 
 @end

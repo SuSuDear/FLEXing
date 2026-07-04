@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
     @protected
     /// Unused by default, use if you want
     NSString *_title;
-    
+
     @private
     __weak UITableView *_tableView;
     NSInteger _sectionIndex;
@@ -106,7 +106,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable NSString *)menuTitleForRow:(NSInteger)row API_AVAILABLE(ios(13.0));
 /// Protected, not intended for public use. \c menuTitleForRow:
 /// already includes the value returned from this method.
-/// 
+///
 /// By default, this returns \c @"". Subclasses may override to
 /// provide a detailed description of the target of the context menu.
 - (NSString *)menuSubtitleForRow:(NSInteger)row API_AVAILABLE(ios(13.0));

@@ -101,7 +101,7 @@ typedef NS_ENUM(NSUInteger, FLEXHierarchyViewMode) {
 
 - (void)donePressed {
     // We need to manually close ourselves here because
-    // FLEXNavigationController doesn't ever close tabs itself 
+    // FLEXNavigationController doesn't ever close tabs itself
     [FLEXTabList.sharedList closeTab:self];
     [self.hierarchyDelegate viewHierarchyDidDismiss:self.selectedView];
 }

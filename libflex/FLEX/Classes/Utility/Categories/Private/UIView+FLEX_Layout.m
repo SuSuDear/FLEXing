@@ -23,7 +23,7 @@
        [self.leftAnchor constraintEqualToAnchor:view.leftAnchor],
        [self.bottomAnchor constraintEqualToAnchor:view.bottomAnchor],
        [self.rightAnchor constraintEqualToAnchor:view.rightAnchor],
-   ]]; 
+   ]];
 }
 
 - (void)flex_pinEdgesTo:(UIView *)view withInsets:(UIEdgeInsets)i {

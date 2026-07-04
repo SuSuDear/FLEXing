@@ -34,7 +34,7 @@
 
 + (instancetype)itemWithTitle:(NSString *)title image:(UIImage *)image sibling:(FLEXExplorerToolbarItem *)backupItem {
     NSParameterAssert(title); NSParameterAssert(image);
-    
+
     FLEXExplorerToolbarItem *toolbarItem = [self buttonWithType:UIButtonTypeCustom];
     toolbarItem.sibling = backupItem;
     toolbarItem.title = title;
@@ -53,7 +53,7 @@
     if (!self.enabled && self.sibling) {
         return self.sibling.currentItem;
     }
-    
+
     return self;
 }
 
@@ -108,7 +108,7 @@
                 [superview addSubview:self.sibling];
             }
         }
-        
+
         super.enabled = enabled;
     }
 }

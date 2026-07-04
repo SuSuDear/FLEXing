@@ -3,7 +3,7 @@
 //  Pods
 //
 //  Created by Tanner on 2/24/21.
-//  
+//
 //
 
 #import "Cocoa+FLEXShortcuts.h"
@@ -17,7 +17,7 @@
             return @"Cancel style";
         case UIAlertActionStyleDestructive:
             return @"Destructive style";
-            
+
         default:
             return [NSString stringWithFormat:@"Unknown (%@)", @(self.style)];
     }

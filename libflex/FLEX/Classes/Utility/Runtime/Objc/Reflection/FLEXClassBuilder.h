@@ -57,7 +57,7 @@
 #pragma mark FLEXIvarBuilder
 @interface FLEXIvarBuilder : NSObject
 
-/// Consider using the \c FLEXIvarBuilderWithNameAndType() macro below. 
+/// Consider using the \c FLEXIvarBuilderWithNameAndType() macro below.
 /// @param name The name of the Ivar, such as \c \@"_value".
 /// @param size The size of the Ivar. Usually \c sizeof(type). For objects, this is \c sizeof(id).
 /// @param alignment The alignment of the Ivar. Usually \c log2(sizeof(type)).

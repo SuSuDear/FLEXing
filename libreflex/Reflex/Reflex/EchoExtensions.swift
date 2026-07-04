@@ -16,7 +16,7 @@ typealias Field = (name: String, type: Metadata)
 
 enum ReflexError: Error {
     case failedDynamicCast(src: Any.Type, dest: Any.Type)
-    
+
     var description: String {
         switch self {
             case .failedDynamicCast(let src, let dest):
@@ -30,17 +30,17 @@ enum ReflexError: Error {
 /// same pointers that would appear if you manually reflected a type
 extension KnownMetadata.Builtin {
     static var supported: Set<RawType> = Set(_typePtrs)
-    
+
     private static var _types: [Any.Type] = [
         Int8.self, Int16.self, Int32.self, Int64.self, Int.self,
         UInt8.self, UInt16.self, UInt32.self, UInt64.self, UInt.self,
         Float32.self, Float64.self, Float.self, Double.self, CGFloat.self,
     ]
-    
+
     private static var _typePtrs: [RawType] {
         return self._types.map { ~$0 }
     }
-    
+
     static var typeEncodings: [RawType: FLEXTypeEncoding] = [
         ~Int8.self: .char,
         ~Int16.self: .short,
@@ -65,19 +65,19 @@ extension KnownMetadata {
     static let date: StructDescriptor = reflectStruct(Date.self)!.descriptor
     static let data: StructDescriptor = reflectStruct(Data.self)!.descriptor
     static let url: StructDescriptor = reflectStruct(URL.self)!.descriptor
-    
+
     static let foundationStructs: Set<RawType> = Set([
         string, array, dictionary, date, data, url
     ].map(\.ptr))
-    
+
     static func isFoundationStruct(_ metadata: Metadata) -> Bool {
         guard let metadata = metadata as? StructMetadata else {
             return false
         }
-        
+
         return foundationStructs.contains(metadata.descriptor.ptr)
     }
-    
+
     static let foundationTypeDescriptorToClass: [RawType: AnyClass] = [
         string.ptr: NSString.self,
         array.ptr: NSArray.self,
@@ -86,12 +86,12 @@ extension KnownMetadata {
         data.ptr: NSData.self,
         url.ptr: NSURL.self,
     ]
-    
+
     static func classForStruct(_ metadata: Metadata) -> AnyClass? {
         guard let metadata = metadata as? StructMetadata else {
             return nil
         }
-        
+
         return foundationTypeDescriptorToClass[metadata.descriptor.ptr]
     }
 }
@@ -100,36 +100,36 @@ extension Metadata {
     private var `enum`: EnumMetadata { self as! EnumMetadata }
     private var `struct`: StructMetadata { self as! StructMetadata }
     private var tuple: TupleMetadata { self as! TupleMetadata }
-    
+
     /// This doesn't actually work very well since Double etc aren't opaque,
     /// but instead contain a single member that is itself opaque
     private var isBuiltin_alt: Bool {
         return self is OpaqueMetadata
     }
-    
+
     /// This is `true` for any "primitive" type
     var isBuiltin: Bool {
         guard self.vwt.flags.isPOD else {
             return false
         }
-        
+
         return KnownMetadata.Builtin.supported.contains(self.ptr)
     }
-    
+
     /// Whether this type represents a struct (or optional) besides
-    /// a primitive that is bridged to Objective-C as an object 
+    /// a primitive that is bridged to Objective-C as an object
     var isNonTriviallyBridgedToObjc: Bool {
         switch self.kind {
             case .struct:
                 return KnownMetadata.isFoundationStruct(self.struct)
             case .optional:
                 return self.enum.optionalType.isNonTriviallyBridgedToObjc
-                
+
             default:
                 return false
         }
     }
-    
+
     /// Programmatically perform a cast like `foo as? T` at runtime
     func dynamicCast(from variable: Any) throws -> Any {
         func cast<T>(_: T.Type) throws -> T {
@@ -137,18 +137,18 @@ extension Metadata {
                 let srcType = Swift.type(of: variable)
                 throw ReflexError.failedDynamicCast(src: srcType, dest: T.self)
             }
-            
+
             return casted
         }
-        
+
         return try _openExistential(self.type, do: cast(_:))
     }
-    
+
     var typeEncoding: FLEXTypeEncoding {
         switch self.kind {
             case .class:
                 return .objcObject
-                
+
             case .struct:
                 // Hard-code types for builtin types and a few foundation structs
                 if self.isBuiltin {
@@ -159,22 +159,22 @@ extension Metadata {
                     // TODO encode as proper type
                     return .objcObject
                 }
-                
+
                 return .structBegin
-                
+
             case .enum:
                 if self.enum.descriptor.numPayloadCases > 0 {
                     return .unknown
                 }
                 return .unknown // TODO: return proper sized int for enums?
-            
+
             case .optional:
                 // For optionals, use the encoding of the Wrapped type
                 return self.enum.optionalType!.typeEncoding
-                
+
             case .tuple:
                 return .structBegin
-                
+
             case .foreignClass,
                  .opaque,
                  .function,
@@ -189,7 +189,7 @@ extension Metadata {
                 return .unknown
         }
     }
-    
+
     // TODO: enums would show up as anonymous structs I think
     var typeEncodingString: String {
         switch self.typeEncoding {
@@ -233,7 +233,7 @@ protocol ContextualNominalType: NominalType {
 extension ClassMetadata: NominalType, ContextualNominalType {
     var typeDescriptor: ClassDescriptor { self.descriptor! }
 }
-extension StructMetadata: NominalType, ContextualNominalType {    
+extension StructMetadata: NominalType, ContextualNominalType {
     var typeDescriptor: StructDescriptor { self.descriptor }
 }
 extension EnumMetadata: NominalType, ContextualNominalType {
@@ -245,19 +245,19 @@ extension ContextualNominalType {
     func recordIndex(forKey key: String) -> Int? {
         return self.typeDescriptor.fields.records.firstIndex { $0.name == key }
     }
-    
+
     func fieldOffset(for key: String) -> Int? {
         if let idx = self.recordIndex(forKey: key) {
             return self.fieldOffsets[idx]
         }
-        
+
         return nil
     }
-    
+
     func fieldType(for key: String) -> Metadata? {
         return self.fields.first(where: { $0.name == key })?.type
     }
-    
+
     var shallowFields: [Field] {
         let r: [FieldRecord] = self.typeDescriptor.fields.records
         return r.filter(\.hasMangledTypeName).map {
@@ -275,7 +275,7 @@ extension StructMetadata {
         let ptr = object~
         return ptr[offset]
     }
-    
+
     func getValueBox<O>(forKey key: String, from object: O) -> AnyExistentialContainer {
         guard let offset = self.fieldOffset(for: key), let type = self.fieldType(for: key) else {
             fatalError("Class '\(self.typeDescriptor.name)' has no member '\(key)'")
@@ -284,17 +284,17 @@ extension StructMetadata {
         let ptr = object~
         return .init(boxing: ptr + offset, type: type)
     }
-    
+
     func set<T, O>(value: T, forKey key: String, on object: inout O) {
         self.set(value: value, forKey: key, pointer: object~)
     }
-    
+
     func set(value: Any, forKey key: String, pointer ptr: RawPointer) {
         let offset = self.fieldOffset(for: key)!
         let type = self.fieldType(for: key)!
         ptr.storeBytes(of: value, type: type, offset: offset)
     }
-    
+
     var fields: [Field] { self.shallowFields }
 }
 
@@ -305,16 +305,16 @@ extension ClassMetadata {
                 .firstIndex(where: { $0 == key }) else {
             return nil
         }
-        
+
         var count: UInt32 = 0
         guard let ivars = class_copyIvarList(self.type as? AnyClass, &count) else {
             return nil
         }
-        
+
         defer { free(ivars) }
         return ivars[idx]
     }
-    
+
     /// Does not traverse the class hierarchy
     func ivarOffset(for key: String) -> Int? {
         // If the class has objc heritage, get the field offset using the objc
@@ -324,24 +324,24 @@ extension ClassMetadata {
             guard let ivar = self.objcIvar(for: key) else {
                 return nil
             }
-            
+
             return ivar_getOffset(ivar)
         }
-        
+
         // Does this ivar exist?
         guard let idx = self.recordIndex(forKey: key) else {
             // Not here, but maybe in a superclass
             return nil
         }
-        
+
         // Yes! Now, grab the offset and offset it by the superclass's instance size
 //        if let supercls = self.superclassMetadata?.type {
 //            return self.fieldOffsets[idx] //+ class_getInstanceSize(supercls as? AnyClass)
 //        }
-        
+
         return self.fieldOffsets[idx]
     }
-    
+
     func getValue<T, O>(forKey key: String, from object: O) -> T {
         guard let offset = self.ivarOffset(for: key) else {
             if let sup = self.superclassMetadata {
@@ -354,7 +354,7 @@ extension ClassMetadata {
         let ptr = object~
         return ptr[offset]
     }
-    
+
     func getValueBox<O>(forKey key: String, from object: O) -> AnyExistentialContainer {
         guard let offset = self.ivarOffset(for: key), let type = self.fieldType(for: key) else {
             if let sup = self.superclassMetadata {
@@ -367,11 +367,11 @@ extension ClassMetadata {
         let ptr = object~
         return .init(boxing: ptr + offset, type: type)
     }
-    
+
     func set<T, O>(value: T, forKey key: String, on object: inout O) {
         self.set(value: value, forKey: key, pointer: object~)
     }
-    
+
     func set(value: Any, forKey key: String, pointer ptr: RawPointer) {
         guard let offset = self.ivarOffset(for: key) else {
             if let sup = self.superclassMetadata {
@@ -380,26 +380,26 @@ extension ClassMetadata {
                 fatalError("Class '\(self.typeDescriptor.name)' has no member '\(key)'")
             }
         }
-        
+
         var value = value
         let box = container(for: value)
-        
+
         // Check if we need to do a cast first; sometimes things like
         // Double or Int will be boxed up as NSNumber first.
         let type = self.fieldType(for: key)!
         if type.type != box.type, let cast = try? type.dynamicCast(from: value) {
             value = cast
         }
-        
+
         ptr.storeBytes(of: value, type: type, offset: offset)
     }
-    
+
     /// Consolidate all fields in the class hierarchy
     var fields: [Field] {
         if let sup = self.superclassMetadata, sup.isSwiftClass {
             return self.shallowFields + sup.fields
         }
-        
+
         return self.shallowFields
     }
 }
@@ -414,7 +414,7 @@ extension TypeMetadata {
         let existential = reflect(_protocol) as! MetatypeMetadata
         let instance = existential.instanceMetadata as! ExistentialMetadata
         let desc = instance.protocols.first!
-        
+
         return !self.conformances.filter({ $0.protocol == desc }).isEmpty
     }
 }
@@ -431,30 +431,30 @@ extension AnyExistentialContainer {
     var toAny: Any {
         return unsafeBitCast(self, to: Any.self)
     }
-    
+
     var isEmpty: Bool {
         return self.data == (0, 0, 0)
     }
-    
+
     init(boxing valuePtr: RawPointer, type: Metadata) {
         self = .init(metadata: type)
         self.store(value: valuePtr)
     }
-    
+
     init(nil optionalType: EnumMetadata) {
         self = .init(metadata: optionalType)
         self.zeroMemory()
     }
-    
+
     init(nil optionalType: ClassMetadata) {
         self = .init(metadata: optionalType)
         self.zeroMemory()
     }
-    
+
     mutating func store(value newValuePtr: RawPointer) {
         self.metadata.vwt.initializeWithCopy(self.getValueBuffer(), newValuePtr)
     }
-    
+
     /// Calls into `projectValue()` but will allocate a box
     /// first if needed for types that are not inline
     mutating func getValueBuffer() -> RawPointer {
@@ -462,11 +462,11 @@ extension AnyExistentialContainer {
         if !self.metadata.vwt.flags.isValueInline && self.data.0 == 0 {
             return self.metadata.allocateBoxForExistential(in: &self)~
         }
-        
+
         // We don't need a box or already have one
         return self.projectValue()~
     }
-    
+
     mutating func zeroMemory() {
         let size = self.metadata.vwt.size
         self.getValueBuffer().initializeMemory(
@@ -484,12 +484,12 @@ extension FieldRecord: CustomDebugStringConvertible {
 
 extension EnumMetadata {
     fileprivate var optionalType: Metadata! { self.genericMetadata.first }
-    
+
     func getTag(for instance: Any) -> UInt32 {
         var box = container(for: instance)
         return self.enumVwt.getEnumTag(for: box.projectValue())
     }
-    
+
     func copyPayload(from instance: Any) -> (value: Any, type: Any.Type)? {
         let tag = self.getTag(for: instance)
         let isPayloadCase = self.descriptor.numPayloadCases > tag
@@ -504,7 +504,7 @@ extension EnumMetadata {
             )
             return (unsafeBitCast(payload, to: Any.self), type)
         }
-        
+
         return nil
     }
 }
@@ -534,9 +534,9 @@ extension NominalType {
         return "\(self.type)"
 //        let generics = self.genericMetadata.map(\.description).joined(separator: ", ")
 //        guard !generics.isEmpty else {
-//            return "\(self.type)"            
+//            return "\(self.type)"
 //        }
-//        
+//
 //        return "\(self.type)<\(generics)>"
     }
 }
@@ -560,7 +560,7 @@ extension Metadata {
                 if self.ptr~ == Any.self~ || self.ptr~ == AnyObject.self~ {
                     return "\(self.type)"
                 }
-                
+
                 let ext = (self as! ExistentialMetadata)
                 let protocols = ext.protocols.map(\.description).joined(separator: " & ")
                 if let supercls = ext.superclassMetadata {

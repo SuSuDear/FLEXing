@@ -1,7 +1,7 @@
 Package: libflex
 Name: libFLEX
 Pre-Depends: firmware (>= 9.0)
-Depends: 
+Depends:
 Version: 4.7.0~b4
 Architecture: iphoneos-arm
 Description: A library for Flipboard Explorer.

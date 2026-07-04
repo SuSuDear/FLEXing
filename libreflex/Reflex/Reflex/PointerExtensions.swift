@@ -25,7 +25,7 @@ extension RawPointer {
         get {
             return self.load(fromByteOffset: offset, as: T.self)
         }
-        
+
         set {
             self.storeBytes(of: newValue, toByteOffset: offset, as: T.self)
         }
@@ -38,27 +38,27 @@ extension RawPointer {
             alignment: type.vwt.flags.alignment
         )
     }
-    
+
     /// Allocates space for and stores a value.
     /// You should probably use AnyExistentialContainer instead.
     init(wrapping value: Any, withType metadata: Metadata) {
         self = RawPointer.allocateBuffer(for: metadata)
         self.storeBytes(of: value, type: metadata)
     }
-    
+
     /// For storing a value from an Any container
     func storeBytes(of value: Any, type: Metadata, offset: Int = 0) {
         var box = container(for: value)
         type.vwt.initializeWithCopy((self + offset), box.projectValue()~)
 //        (self + offset).copyMemory(from: box.projectValue(), byteCount: type.vwt.size)
     }
-    
+
     /// For copying a tuple element instance from a pointer
     func copyMemory(ofTupleElement valuePtr: UnsafeRawPointer, layout e: TupleMetadata.Element) {
         e.metadata.vwt.initializeWithCopy((self + e.offset), valuePtr~)
 //        (self + e.offset).copyMemory(from: valuePtr, byteCount: e.metadata.vwt.size)
     }
-    
+
     /// For copying a type instance from a pointer
     func copyMemory(from pointer: RawPointer, type: Metadata, offset: Int = 0) {
         type.vwt.initializeWithCopy((self + offset), pointer)
@@ -74,7 +74,7 @@ extension Unmanaged where Instance == AnyObject {
             _ = self.passRetained(thing as AnyObject).retain()
             return true
         }
-        
+
         return false
     }
 }

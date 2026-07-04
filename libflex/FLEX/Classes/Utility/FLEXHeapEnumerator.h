@@ -30,7 +30,7 @@ typedef void (^flex_object_enumeration_block_t)(__unsafe_unretained id object, _
 @interface FLEXHeapEnumerator : NSObject
 
 /// Use carefully; this method puts a global lock on the heap in between callbacks.
-/// 
+///
 /// Inspired by:
 /// [heap_find.cpp](https://llvm.org/svn/llvm-project/lldb/tags/RELEASE_34/final/examples/darwin/heap_find/heap/heap_find.cpp)
 /// and [samdmarshall](https://gist.github.com/samdmarshall/17f4e66b5e2e579fd396)

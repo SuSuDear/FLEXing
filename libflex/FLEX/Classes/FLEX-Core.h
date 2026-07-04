@@ -19,4 +19,3 @@
 #import "FLEXTableViewCell.h"
 #import "FLEXMultilineTableViewCell.h"
 #import "FLEXKeyValueTableViewCell.h"
-

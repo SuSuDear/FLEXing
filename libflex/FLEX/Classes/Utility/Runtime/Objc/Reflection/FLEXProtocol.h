@@ -34,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// or \c nil if this protocol was probably defined at runtime.
 @property (nonatomic, readonly, nullable) NSString *imagePath;
 
-/// The properties in the protocol, if any. \c nil on iOS 10+ 
+/// The properties in the protocol, if any. \c nil on iOS 10+
 @property (nonatomic, readonly, nullable) NSArray<FLEXProperty *> *properties API_DEPRECATED("Use the more specific accessors below", ios(2.0, 10.0));
 
 /// The required properties in the protocol, if any.

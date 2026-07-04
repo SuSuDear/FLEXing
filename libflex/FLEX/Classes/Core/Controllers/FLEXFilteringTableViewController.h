@@ -18,7 +18,7 @@
 @property (nonatomic, copy) NSArray<FLEXTableViewSection *> *sections;
 /// An array of all possible sections. Empty sections are to be removed
 /// and the resulting array stored in the \c section property. Setting
-/// this property should immediately set \c sections to \c nonemptySections 
+/// this property should immediately set \c sections to \c nonemptySections
 ///
 /// Do not manually initialize this property, it will be
 /// initialized for you using the result of \c makeSections.
@@ -61,7 +61,7 @@
 ///
 /// Subclasses may override to perform additional reloading logic,
 /// such as calling \c -reloadSections if needed. Be sure to call
-/// \c super after any logic that would affect the appearance of 
+/// \c super after any logic that would affect the appearance of
 /// the table view, since the table view is reloaded last.
 ///
 /// Called at the end of this class's implementation of \c updateSearchResults:

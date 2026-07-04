@@ -55,13 +55,13 @@ CGFloat const kFLEXDebounceForExpensiveIO = 0.5;
     } else {
         self = [self initWithStyle:UITableViewStyleGrouped];
     }
-    
+
     return self;
 }
 
 - (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
-    
+
     if (self) {
         _searchBarDebounceInterval = kFLEXDebounceFast;
         _showSearchBarInitially = YES;
@@ -69,13 +69,13 @@ CGFloat const kFLEXDebounceForExpensiveIO = 0.5;
         _manuallyDeactivateSearchOnDisappear = (
             NSProcessInfo.processInfo.operatingSystemVersion.majorVersion < 11
         );
-        
+
         // We will be our own search delegate if we implement this method
         if ([self respondsToSelector:@selector(updateSearchResults:)]) {
             self.searchDelegate = (id)self;
         }
     }
-    
+
     return self;
 }
 
@@ -89,7 +89,7 @@ CGFloat const kFLEXDebounceForExpensiveIO = 0.5;
 - (void)setShowsSearchBar:(BOOL)showsSearchBar {
     if (_showsSearchBar == showsSearchBar) return;
     _showsSearchBar = showsSearchBar;
-    
+
     if (showsSearchBar) {
         UIViewController *results = self.searchResultsController;
         self.searchController = [[UISearchController alloc] initWithSearchResultsController:results];
@@ -110,7 +110,7 @@ CGFloat const kFLEXDebounceForExpensiveIO = 0.5;
         if (@available(iOS 13, *)) {
             self.searchController.automaticallyShowsScopeBar = NO;
         }
-        
+
         [self addSearchController:self.searchController];
     } else {
         // Search already shown and just set to NO, so remove it
@@ -121,10 +121,10 @@ CGFloat const kFLEXDebounceForExpensiveIO = 0.5;
 - (void)setShowsCarousel:(BOOL)showsCarousel {
     if (_showsCarousel == showsCarousel) return;
     _showsCarousel = showsCarousel;
-    
+
     if (showsCarousel) {
         _carousel = ({ weakify(self)
-            
+
             FLEXScopeCarousel *carousel = [FLEXScopeCarousel new];
             carousel.selectedIndexChangedAction = ^(NSInteger idx) { strongify(self);
                 [self.searchDelegate updateSearchResults:self.searchText];
@@ -213,9 +213,9 @@ CGFloat const kFLEXDebounceForExpensiveIO = 0.5;
     self.view = [FLEXTableView style:self.style];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    
+
     self.tableView.estimatedRowHeight = 10;
-    
+
     _shareToolbarItem = FLEXBarButtonItemSystem(Action, self, @selector(shareButtonPressed:));
     _bookmarksToolbarItem = [UIBarButtonItem
         flex_itemWithImage:FLEXResources.bookmarksIcon target:self action:@selector(showBookmarks)
@@ -223,7 +223,7 @@ CGFloat const kFLEXDebounceForExpensiveIO = 0.5;
     _openTabsToolbarItem = [UIBarButtonItem
         flex_itemWithImage:FLEXResources.openTabsIcon target:self action:@selector(showTabSwitcher)
     ];
-    
+
     self.leftmostToolbarItem = UIBarButtonItem.flex_fixedSpace;
     self.middleLeftToolbarItem = UIBarButtonItem.flex_fixedSpace;
     self.middleToolbarItem = UIBarButtonItem.flex_fixedSpace;
@@ -231,9 +231,9 @@ CGFloat const kFLEXDebounceForExpensiveIO = 0.5;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
-    
+
     // Toolbar
     self.navigationController.toolbarHidden = self.toolbarItems.count > 0;
     self.navigationController.hidesBarsOnSwipe = YES;
@@ -252,14 +252,14 @@ CGFloat const kFLEXDebounceForExpensiveIO = 0.5;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+
     if (@available(iOS 11.0, *)) {
         // When going back, make the search bar reappear instead of hiding
         if ((self.pinSearchBar || self.showSearchBarInitially) && !self.didInitiallyRevealSearchBar) {
             self.navigationItem.hidesSearchBarWhenScrolling = NO;
         }
     }
-    
+
     // Make the keyboard seem to appear faster
     if (self.activatesSearchBarAutomatically) {
         [self makeKeyboardAppearNow];
@@ -285,11 +285,11 @@ CGFloat const kFLEXDebounceForExpensiveIO = 0.5;
             }];
         }
     }
-    
+
     if (self.activatesSearchBarAutomatically) {
         // Keyboard has appeared, now we call this as we soon present our search bar
         [self removeDummyTextField];
-        
+
         // Activate the search bar
         dispatch_async(dispatch_get_main_queue(), ^{
             // This doesn't work unless it's wrapped in this dispatch_async call
@@ -303,7 +303,7 @@ CGFloat const kFLEXDebounceForExpensiveIO = 0.5;
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    
+
     if (self.manuallyDeactivateSearchOnDisappear && self.searchController.isActive) {
         self.searchController.active = NO;
     }
@@ -323,7 +323,7 @@ CGFloat const kFLEXDebounceForExpensiveIO = 0.5;
     if (!self.isViewLoaded) {
         return;
     }
-    
+
     self.toolbarItems = @[
         self.leftmostToolbarItem,
         UIBarButtonItem.flex_flexibleSpace,
@@ -335,13 +335,13 @@ CGFloat const kFLEXDebounceForExpensiveIO = 0.5;
         UIBarButtonItem.flex_flexibleSpace,
         self.openTabsToolbarItem,
     ];
-    
+
     for (UIBarButtonItem *item in self.toolbarItems) {
         [item _setWidth:60];
         // This does not work for anything but fixed spaces for some reason
         // item.width = 60;
     }
-    
+
     // Disable tabs entirely when not presented by FLEXExplorerViewController
     UIViewController *presenter = self.navigationController.presentingViewController;
     if (![presenter isKindOfClass:[FLEXExplorerViewController class]]) {
@@ -370,19 +370,19 @@ CGFloat const kFLEXDebounceForExpensiveIO = 0.5;
             self.leftmostToolbarItem = items[2];
         }
     }
-    
+
     [self setupToolbarItems];
 }
 
 - (void)setShowsShareToolbarItem:(BOOL)showShare {
     if (_showsShareToolbarItem != showShare) {
         _showsShareToolbarItem = showShare;
-        
+
         if (showShare) {
             // Push out leftmost item
             self.leftmostToolbarItem = self.middleLeftToolbarItem;
             self.middleLeftToolbarItem = self.middleToolbarItem;
-            
+
             // Use share for middle
             self.middleToolbarItem = self.shareToolbarItem;
         } else {
@@ -392,7 +392,7 @@ CGFloat const kFLEXDebounceForExpensiveIO = 0.5;
             self.leftmostToolbarItem = UIBarButtonItem.flex_fixedSpace;
         }
     }
-    
+
     [self setupToolbarItems];
 }
 
@@ -405,7 +405,7 @@ CGFloat const kFLEXDebounceForExpensiveIO = 0.5;
 
 - (void)debounce:(void(^)(void))block {
     [self.debounceTimer invalidate];
-    
+
     self.debounceTimer = [NSTimer
         scheduledTimerWithTimeInterval:self.searchBarDebounceInterval
         target:block
@@ -421,7 +421,7 @@ CGFloat const kFLEXDebounceForExpensiveIO = 0.5;
             self.carousel.frame, self.carousel.intrinsicContentSize.height
         );
     }
-    
+
     self.tableView.tableHeaderView = self.tableView.tableHeaderView;
 }
 
@@ -430,11 +430,11 @@ CGFloat const kFLEXDebounceForExpensiveIO = 0.5;
         self.tableView.tableHeaderView = carousel;
     } else {
         carousel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
-        
+
         CGRect frame = self.tableHeaderViewContainer.frame;
         CGRect subviewFrame = carousel.frame;
         subviewFrame.origin.y = 0;
-        
+
         // Put the carousel below the search bar if it's already there
         if (self.showsSearchBar) {
             carousel.frame = subviewFrame = FLEXRectSetY(
@@ -444,17 +444,17 @@ CGFloat const kFLEXDebounceForExpensiveIO = 0.5;
         } else {
             frame.size.height = carousel.intrinsicContentSize.height;
         }
-        
+
         self.tableHeaderViewContainer.frame = frame;
         [self.tableHeaderViewContainer addSubview:carousel];
     }
-    
+
     [self layoutTableHeaderIfNeeded];
 }
 
 - (void)removeCarousel:(FLEXScopeCarousel *)carousel {
     [carousel removeFromSuperview];
-    
+
     if (@available(iOS 11.0, *)) {
         self.tableView.tableHeaderView = nil;
     } else {
@@ -478,7 +478,7 @@ CGFloat const kFLEXDebounceForExpensiveIO = 0.5;
         CGRect frame = self.tableHeaderViewContainer.frame;
         frame.size.width = MAX(frame.size.width, subviewFrame.size.width);
         frame.size.height = subviewFrame.size.height;
-        
+
         // Move the carousel down if it's already there
         if (self.showsCarousel) {
             self.carousel.frame = FLEXRectSetY(
@@ -486,7 +486,7 @@ CGFloat const kFLEXDebounceForExpensiveIO = 0.5;
             );
             frame.size.height += self.carousel.frame.size.height;
         }
-        
+
         self.tableHeaderViewContainer.frame = frame;
         [self layoutTableHeaderIfNeeded];
     }
@@ -497,7 +497,7 @@ CGFloat const kFLEXDebounceForExpensiveIO = 0.5;
         self.navigationItem.searchController = nil;
     } else {
         [controller.searchBar removeFromSuperview];
-        
+
         if (self.showsCarousel) {
 //            self.carousel.frame = FLEXRectRemake(CGPointZero, self.carousel.frame.size);
             [self removeCarousel:self.carousel];
@@ -514,7 +514,7 @@ CGFloat const kFLEXDebounceForExpensiveIO = 0.5;
         _tableHeaderViewContainer = [UIView new];
         self.tableView.tableHeaderView = self.tableHeaderViewContainer;
     }
-    
+
     return _tableHeaderViewContainer;
 }
 
@@ -547,7 +547,7 @@ static UITextField *kDummyTextField = nil;
         kDummyTextField = [UITextField new];
         kDummyTextField.autocorrectionType = UITextAutocorrectionTypeNo;
     }
-    
+
     kDummyTextField.inputAccessoryView = self.searchController.searchBar.inputAccessoryView;
     [UIApplication.sharedApplication.keyWindow addSubview:kDummyTextField];
     [kDummyTextField becomeFirstResponder];
@@ -564,7 +564,7 @@ static UITextField *kDummyTextField = nil;
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
     [self.debounceTimer invalidate];
     NSString *text = searchController.searchBar.text;
-    
+
     void (^updateSearchResults)(void) = ^{
         if (self.searchResultsUpdater) {
             [self.searchResultsUpdater updateSearchResults:text];
@@ -572,7 +572,7 @@ static UITextField *kDummyTextField = nil;
             [self.searchDelegate updateSearchResults:text];
         }
     };
-    
+
     // Only debounce if we want to, and if we have a non-empty string
     // Empty string events are sent instantly
     if (text.length && self.searchBarDebounceInterval > kFLEXDebounceInstant) {

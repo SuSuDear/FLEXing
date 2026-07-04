@@ -97,10 +97,10 @@
         case FLEXGlobalsRowMainThread:
         case FLEXGlobalsRowOperationQueue:
             return [FLEXObjectExplorerFactory flex_concreteGlobalsEntry:row];
-        
+
         case FLEXGlobalsRowCount: break;
     }
-    
+
     @throw [NSException
         exceptionWithName:NSInternalInconsistencyException
         reason:@"Missing globals case in switch" userInfo:nil
@@ -157,7 +157,7 @@
             [sections addObject:[FLEXGlobalsSection title:title rows:rowsBySection[@(i)]]];
         }
     });
-    
+
     return sections;
 }
 
@@ -171,15 +171,15 @@
     self.showsSearchBar = YES;
     self.searchBarDebounceInterval = kFLEXDebounceInstant;
     self.navigationItem.backBarButtonItem = [UIBarButtonItem flex_backItemWithTitle:@"Back"];
-    
+
     _manuallyDeselectOnAppear = NSProcessInfo.processInfo.operatingSystemVersion.majorVersion < 10;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+
     [self disableToolbar];
-    
+
     if (self.manuallyDeselectOnAppear) {
         [self.tableView deselectRowAtIndexPath:self.tableView.indexPathForSelectedRow animated:YES];
     }

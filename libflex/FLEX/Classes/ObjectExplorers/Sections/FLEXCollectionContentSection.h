@@ -80,7 +80,7 @@ typedef id<NSObject, NSFastEnumeration /* FLEXCollection */>(^FLEXCollectionCont
 ///
 /// By default, the collection will filter on the title and subtitle of the row.
 /// So if you don't ever call \c configureCell: for example, you will need to set
-/// this property so that your filter logic will match how you're setting up the cell. 
+/// this property so that your filter logic will match how you're setting up the cell.
 @property (nonatomic) BOOL (^customFilter)(NSString *filterText, ObjectType element);
 
 /// Get the object in the collection associated with the given row.

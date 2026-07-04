@@ -18,4 +18,3 @@ typedef void (^GestureBlock)(UIGestureRecognizer *gesture);
 @property (nonatomic, setter=flex_setAction:) GestureBlock flex_action;
 
 @end
-

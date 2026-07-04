@@ -148,7 +148,7 @@ static BOOL my_os_log_shim_enabled(void *addr) {
     _logMessages = [FLEXMutableListSection list:@[]
         cellConfiguration:^(FLEXSystemLogCell *cell, FLEXSystemLogMessage *message, NSInteger row) {
             strongify(self)
-        
+
             cell.logMessage = message;
             cell.highlightedText = self.filterText;
 
@@ -187,7 +187,7 @@ static BOOL my_os_log_shim_enabled(void *addr) {
     [self.logMessages mutate:^(NSMutableArray *list) {
         [list addObjectsFromArray:newMessages];
     }];
-    
+
     // Re-filter messages to filter against new messages
     if (self.filterText.length) {
         [self updateSearchResults:self.filterText];

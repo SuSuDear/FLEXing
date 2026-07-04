@@ -32,7 +32,7 @@ NSArray<FLEXProperty *> * _Nullable FLEXGetAllProperties(_Nullable Class cls);
 /// @param cls a class object to get instance methods,
 /// or a metaclass object to get class methods
 /// @param instance used to mark methods as instance methods or not.
-/// Not used to determine whether to get instance or class methods. 
+/// Not used to determine whether to get instance or class methods.
 NSArray<FLEXMethod *> * _Nullable FLEXGetAllMethods(_Nullable Class cls, BOOL instance);
 /// @param cls a class object to get all instance and class methods.
 NSArray<FLEXMethod *> * _Nullable FLEXGetAllInstanceAndClassMethods(_Nullable Class cls);

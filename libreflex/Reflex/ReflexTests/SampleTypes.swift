@@ -35,20 +35,20 @@ class Sprite {
 class Person: Equatable {
     var name: String
     var age: Int
-    
+
     var tuple: (String, Int) {
         return (self.name, self.age)
     }
-    
+
     internal init(name: String, age: Int) {
         self.name = name
         self.age = age
     }
-    
+
     static func == (lhs: Person, rhs: Person) -> Bool {
         return lhs.name == rhs.name && lhs.age == rhs.age
     }
-    
+
     func sayHello() {
         print("Hello!")
     }
@@ -58,21 +58,21 @@ class Employee: Person {
     private(set) var position: String
     private(set) var salary: Double
     let cubicleSize = Size(width: 5, height: 7)
-    
+
     var job: (position: String, salary: Double) {
         return (self.position, self.salary)
     }
-    
+
     internal init(name: String, age: Int, position: String, salary: Double = 60_000) {
         self.position = position
         self.salary = salary
         super.init(name: name, age: age)
     }
-    
+
     func promote() -> (position: String, salary: Double) {
         self.position += "+"
         self.salary *= 1.05
-        
+
         return self.job
     }
 }
@@ -96,25 +96,25 @@ class RFSlider: RFView, Slidable {
     var maxValue = 1.0
     var step = 0.1
     @objc var smooth = false
-    
+
     var title = ""
     var subtitle: String? = nil
     var tag = 0
-    
+
     func zero() {
         value = self.minValue
     }
-    
+
     @objc
     func setRange(_ range: NSRange) {
         self.minValue = Double(range.location)
         self.maxValue = self.minValue + Double(range.length)
-        
+
         if self.value < self.minValue || self.value > self.maxValue {
             self.zero()
         }
     }
-    
+
     static func == (l: RFSlider, r: RFSlider) -> Bool {
         return l.value == r.value
     }
