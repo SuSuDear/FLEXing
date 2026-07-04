@@ -14,39 +14,6 @@
 #import <notify.h>
 #import "Interfaces.h"
 
-%group iOS13StatusBar
-// Runs in SpringBoard; forwards status bar events to app
-%hook SBMainDisplaySceneLayoutStatusBarView
-- (void)_addStatusBarIfNeeded {
-	%orig;
-
-	UIView *statusBar = [self valueForKey:@"_statusBar"];
-	[statusBar addGestureRecognizer:[[UILongPressGestureRecognizer alloc]
-        initWithTarget:self action:@selector(flexGestureHandler:)
-    ]];
-}
-
-%new
-- (void)flexGestureHandler:(UILongPressGestureRecognizer *)recognizer {
-	if (recognizer.state == UIGestureRecognizerStateBegan) {
-		[self _statusBarTapped:recognizer type:kFLEXLongPressGesture];
-	}
-}
-%end // SBMainDisplaySceneLayoutStatusBarView
-
-// Runs in apps; receives status bar events
-%hook UIStatusBarManager
-- (void)handleTapAction:(UIStatusBarTapAction *)action {
-    if (action.type == kFLEXLongPressGesture) {
-        [manager performSelector:show];
-    } else {
-        %orig(action);
-    }
-}
-%end // UIStatusBarManager
-%end // iOS13StatusBar
-
-
 %group VolumeButtonGesture
 
 %hook SpringBoard
@@ -82,8 +49,4 @@
 
 %ctor {
     %init(VolumeButtonGesture);
-
-    if (@available(iOS 13, *)) {
-        %init(iOS13StatusBar);
-    }
 }

@@ -1,3 +1,3 @@
-A FLEX loader that supports triggering FLEX on a per-application basis by long-pressing on the status bar or holding anywhere with 3 fingers.
+A FLEX loader that supports triggering FLEX on a per-application basis by pressing volume up and volume down together.
 
 Requires libFLEX.

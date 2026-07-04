@@ -14,8 +14,6 @@
 
 #pragma mark Globals
 
-#define kFLEXLongPressGesture 0xdeadbabe
-
 extern BOOL initialized;
 extern id manager;
 extern SEL show;
@@ -44,8 +42,6 @@ extern SEL show;
 
 #pragma mark Interfaces
 
-@interface UIStatusBarWindow : UIWindow @end
-
 @interface UIApplication (Private)
 - (id)displayIdentifier;
 @end
@@ -56,16 +52,6 @@ extern SEL show;
 
 @interface SpringBoard : UIApplication
 - (SBApplication *)_accessibilityFrontMostApplication;
-@end
-
-// iOS 13 //
-
-@interface UIStatusBarTapAction : NSObject
-@property (nonatomic, readonly) NSInteger type;
-@end
-
-@interface SBMainDisplaySceneLayoutStatusBarView : UIView
-- (void)_statusBarTapped:(id)sender type:(NSInteger)type;
 @end
 
 @interface _UISheetDetent : NSObject

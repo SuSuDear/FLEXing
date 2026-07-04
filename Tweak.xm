@@ -15,8 +15,6 @@ BOOL initialized = NO;
 id manager = nil;
 SEL show = nil;
 
-static NSHashTable *windowsWithGestures = nil;
-
 static id (*FLXGetManager)();
 static SEL (*FLXRevealSEL)();
 static Class (*FLXWindowClass)();
@@ -94,8 +92,6 @@ inline BOOL flexAlreadyLoaded() {
         if (FLXGetManager && FLXRevealSEL) {
             manager = FLXGetManager();
             show = FLXRevealSEL();
-
-            windowsWithGestures = [NSHashTable weakObjectsHashTable];
             initialized = YES;
 
             NSString *bid = NSBundle.mainBundle.bundleIdentifier;
@@ -116,41 +112,8 @@ inline BOOL flexAlreadyLoaded() {
     return (initialized && [self isKindOfClass:FLXWindowClass()]) ? YES : %orig;
 }
 
-- (void)becomeKeyWindow {
-    %orig;
-
-    if (!initialized) {
-        return;
-    }
-
-    BOOL needsGesture = ![windowsWithGestures containsObject:self];
-    BOOL isFLEXWindow = [self isKindOfClass:FLXWindowClass()];
-    BOOL isStatusBar  = [self isKindOfClass:[UIStatusBarWindow class]];
-    if (needsGesture && !isFLEXWindow && !isStatusBar) {
-        [windowsWithGestures addObject:self];
-
-        // Add 3-finger long-press gesture for apps without a status bar
-        UILongPressGestureRecognizer *tap = [[UILongPressGestureRecognizer alloc] initWithTarget:manager action:show];
-        tap.minimumPressDuration = .5;
-        tap.numberOfTouchesRequired = 3;
-
-        [self addGestureRecognizer:tap];
-    }
-}
 %end
 
-%hook UIStatusBarWindow
-- (id)initWithFrame:(CGRect)frame {
-    self = %orig;
-
-    if (initialized) {
-        // Add long-press gesture to status bar
-        [self addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:manager action:show]];
-    }
-
-    return self;
-}
-%end
 
 %hook FLEXExplorerViewController
 - (BOOL)_canShowWhileLocked {
