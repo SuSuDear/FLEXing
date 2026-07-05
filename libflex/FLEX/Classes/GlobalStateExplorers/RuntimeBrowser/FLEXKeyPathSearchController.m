@@ -16,6 +16,9 @@
 #import "FLEXTableView.h"
 #import "FLEXUtility.h"
 #import "FLEXObjectExplorerFactory.h"
+#import "FLEXAlert.h"
+#import "FLEXClassHeaderGenerator.h"
+#import "FLEXClassHeaderViewController.h"
 
 @interface FLEXKeyPathSearchController ()
 @property (nonatomic, readonly, weak) id<FLEXKeyPathSearchControllerDelegate> delegate;
@@ -384,8 +387,9 @@
     if (self.bundlesOrClasses) {
         NSString *bundleSuffixOrClass = self.bundlesOrClasses[indexPath.row];
         if (self.keyPath.classKey) {
-            NSParameterAssert(NSClassFromString(bundleSuffixOrClass));
-            [self.delegate didSelectClass:NSClassFromString(bundleSuffixOrClass)];
+            Class cls = NSClassFromString(bundleSuffixOrClass);
+            NSParameterAssert(cls);
+            [self presentClassActions:cls];
         } else {
             // Selected a bundle
             [self didSelectKeyPathOption:bundleSuffixOrClass];
@@ -394,11 +398,31 @@
         if (self.filteredClasses.count) {
             Class cls = NSClassFromString(self.filteredClasses[indexPath.row]);
             NSParameterAssert(cls);
-            [self.delegate didSelectClass:cls];
+            [self presentClassActions:cls];
         } else {
             @throw NSInternalInconsistencyException;
         }
     }
+}
+
+- (void)presentClassActions:(Class)cls {
+    UIViewController *host = (UIViewController *)self.delegate;
+    [self.delegate.searchController.searchBar resignFirstResponder];
+
+    [FLEXAlert makeSheet:^(FLEXAlert *make) {
+        make.title(NSStringFromClass(cls));
+        make.button(@"Explore Class").handler(^(NSArray<NSString *> *strings) {
+            [self.delegate didSelectClass:cls];
+        });
+        make.button(@"View Header").handler(^(NSArray<NSString *> *strings) {
+            FLEXClassHeaderViewController *header = [[FLEXClassHeaderViewController alloc] initWithClass:cls];
+            [host.navigationController pushViewController:header animated:YES];
+        });
+        make.button(@"Copy Header").handler(^(NSArray<NSString *> *strings) {
+            UIPasteboard.generalPasteboard.string = [FLEXClassHeaderGenerator headerForClass:cls];
+        });
+        make.button(@"Cancel").cancelStyle();
+    } showFrom:host];
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {

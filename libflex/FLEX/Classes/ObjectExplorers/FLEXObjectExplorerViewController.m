@@ -22,6 +22,7 @@
 #import "FLEXTableViewCell.h"
 #import "FLEXScopeCarousel.h"
 #import "FLEXMetadataSection.h"
+#import "FLEXClassHeaderViewController.h"
 #import "FLEXSingleRowSection.h"
 #import "FLEXShortcutsSection.h"
 #import "NSUserDefaults+FLEX.h"
@@ -105,10 +106,11 @@
         return NSStringFromClass(cls);
     }];
 
-    // ... button for extra options
-    [self addToolbarItems:@[[UIBarButtonItem
-        flex_itemWithImage:FLEXResources.moreIcon target:self action:@selector(moreButtonPressed:)
-    ]]];
+    // Header button and ... button for extra options
+    [self addToolbarItems:@[
+        FLEXBarButtonItem(@"Header", self, @selector(headerButtonPressed:)),
+        [UIBarButtonItem flex_itemWithImage:FLEXResources.moreIcon target:self action:@selector(moreButtonPressed:)]
+    ]];
 
     // Swipe gestures to swipe between classes in the hierarchy
     UISwipeGestureRecognizer *leftSwipe = [[UISwipeGestureRecognizer alloc]
@@ -238,6 +240,12 @@
         });
         make.button(@"Cancel").cancelStyle();
     } showFrom:self source:sender];
+}
+
+- (void)headerButtonPressed:(UIBarButtonItem *)sender {
+    Class cls = class_isMetaClass(object_getClass(self.object)) ? (Class)self.object : [self.object class];
+    FLEXClassHeaderViewController *header = [[FLEXClassHeaderViewController alloc] initWithClass:cls];
+    [self.navigationController pushViewController:header animated:YES];
 }
 
 
