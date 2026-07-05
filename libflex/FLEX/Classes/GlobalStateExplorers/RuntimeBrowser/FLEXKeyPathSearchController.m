@@ -422,7 +422,7 @@
             UIPasteboard.generalPasteboard.string = [FLEXClassHeaderGenerator headerForClass:cls];
         });
         make.button(@"Cancel").cancelStyle();
-    } showFrom:host];
+    } showFrom:host source:nil];
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
