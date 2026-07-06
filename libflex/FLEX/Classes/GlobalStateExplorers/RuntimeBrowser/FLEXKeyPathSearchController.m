@@ -128,6 +128,21 @@
     self.classesToMethods = nil;
 }
 
+- (void)showClassHierarchyForClass:(Class)cls {
+    NSString *className = NSStringFromClass(cls);
+    if (!className.length) {
+        return;
+    }
+
+    NSString *escapedClassName = [className stringByReplacingOccurrencesOfString:@"." withString:@"\\."];
+    NSString *keyPath = [NSString stringWithFormat:@"*.%@.", escapedClassName];
+    self.delegate.searchController.searchBar.text = keyPath;
+    self.keyPath = [FLEXRuntimeKeyPathTokenizer tokenizeString:keyPath];
+    [self didSelectAbsoluteClass:className];
+    [self updateToolbarButtons];
+    [self.delegate.tableView reloadData];
+}
+
 - (void)didPressButton:(NSString *)text insertInto:(UISearchBar *)searchBar {
     [self.toolbar setKeyPath:self.keyPath suggestions:nil];
 

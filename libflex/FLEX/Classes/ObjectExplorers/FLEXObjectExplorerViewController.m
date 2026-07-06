@@ -23,6 +23,7 @@
 #import "FLEXScopeCarousel.h"
 #import "FLEXMetadataSection.h"
 #import "FLEXClassHeaderViewController.h"
+#import "FLEXObjcRuntimeViewController.h"
 #import "FLEXSingleRowSection.h"
 #import "FLEXShortcutsSection.h"
 #import "NSUserDefaults+FLEX.h"
@@ -106,8 +107,9 @@
         return NSStringFromClass(cls);
     }];
 
-    // Header button and ... button for extra options
+    // Runtime/Header buttons and ... button for extra options
     [self addToolbarItems:@[
+        FLEXBarButtonItem(@"Runtime", self, @selector(runtimeButtonPressed:)),
         FLEXBarButtonItem(@"Header", self, @selector(headerButtonPressed:)),
         [UIBarButtonItem flex_itemWithImage:FLEXResources.moreIcon target:self action:@selector(moreButtonPressed:)]
     ]];
@@ -240,6 +242,12 @@
         });
         make.button(@"Cancel").cancelStyle();
     } showFrom:self source:sender];
+}
+
+- (void)runtimeButtonPressed:(UIBarButtonItem *)sender {
+    Class cls = class_isMetaClass(object_getClass(self.object)) ? (Class)self.object : [self.object class];
+    FLEXObjcRuntimeViewController *runtime = [[FLEXObjcRuntimeViewController alloc] initWithClass:cls];
+    [self.navigationController pushViewController:runtime animated:YES];
 }
 
 - (void)headerButtonPressed:(UIBarButtonItem *)sender {

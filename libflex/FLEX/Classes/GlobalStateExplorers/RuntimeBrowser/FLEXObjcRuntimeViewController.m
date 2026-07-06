@@ -21,10 +21,20 @@
 
 @property (nonatomic, readonly ) FLEXKeyPathSearchController *keyPathController;
 @property (nonatomic, readonly ) UIView *promptView;
+@property (nonatomic) Class initialClass;
 
 @end
 
 @implementation FLEXObjcRuntimeViewController
+
+- (instancetype)initWithClass:(Class)cls {
+    self = [super initWithStyle:UITableViewStylePlain];
+    if (self) {
+        _initialClass = cls;
+        self.title = @"📚  Runtime Browser";
+    }
+    return self;
+}
 
 #pragma mark - Setup, view events
 
@@ -70,6 +80,10 @@
             [keyPathController didPressButton:text insertInto:searchBar];
         }
     } suggestions:keyPathController.suggestions];
+
+    if (self.initialClass) {
+        [keyPathController showClassHierarchyForClass:self.initialClass];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {

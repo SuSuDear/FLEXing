@@ -11,4 +11,6 @@
 
 @interface FLEXObjcRuntimeViewController : FLEXTableViewController <FLEXGlobalsEntry>
 
+- (instancetype)initWithClass:(Class)cls;
+
 @end

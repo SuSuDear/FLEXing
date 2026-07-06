@@ -34,5 +34,6 @@
 
 - (void)didSelectKeyPathOption:(NSString *)text;
 - (void)didPressButton:(NSString *)text insertInto:(UISearchBar *)searchBar;
+- (void)showClassHierarchyForClass:(Class)cls;
 
 @end
